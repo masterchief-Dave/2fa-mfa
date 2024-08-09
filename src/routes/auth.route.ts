@@ -23,6 +23,7 @@ class AuthRouter {
       this.userMiddleware.hashNewPassword,
       this.authController.signup
     )
+    this.router.get("/welcome", this.authController.getWelcome)
   }
 }
 

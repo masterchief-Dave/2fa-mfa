@@ -52,11 +52,17 @@ const CLIENT_ERROR = Object.freeze({
   message: "Client error",
 } as const)
 
+const EMAIL_ERROR = Object.freeze({
+  response_code: 11,
+  message: "Error sending email",
+} as const)
+
 export {
   AUTHENTICATION_FAILED,
   BAD_REQUEST,
   CLIENT_ERROR,
   DUPLICATE_EMAIL,
+  EMAIL_ERROR,
   INVALID_PERMISSION,
   INVALID_TOKEN,
   REGISTRATION_UNSUCCESSFUL,

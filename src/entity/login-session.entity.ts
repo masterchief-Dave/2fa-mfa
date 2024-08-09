@@ -4,8 +4,8 @@ import ExtendedBaseEntity from "./extended-base.entity"
 
 @Entity({ name: "login_session_tbl" })
 class LoginSession extends ExtendedBaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Column({ length: 50, name: "device_type" })
   deviceType: string

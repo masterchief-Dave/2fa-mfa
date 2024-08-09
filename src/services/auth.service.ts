@@ -10,14 +10,20 @@ import logger from "../extensions/utils/logger"
 import UserDeviceInfo from "../extensions/utils/user-device-info.utils"
 import { ISignUp } from "../types/request/request.type"
 import { IJwtPayload } from "../types/response/response.types"
+import EmailService from "./email.service"
+import RequestUtils from "./request.service"
 
 class AuthService {
   userRepository: Repository<User>
   loginSessionRepository: Repository<LoginSession>
   userDeviceInfo: UserDeviceInfo
+  emailService: EmailService
+  requestUtils: RequestUtils
   constructor() {
     this.userRepository = AppDataSource.getRepository(User)
     this.loginSessionRepository = AppDataSource.getRepository(LoginSession)
+    this.emailService = new EmailService()
+
     // this.userDeviceInfo = new UserDeviceInfo()
   }
 
@@ -77,9 +83,6 @@ class AuthService {
   ) {
     try {
       this.userDeviceInfo = new UserDeviceInfo(req, res)
-      const userDeviceInfo = new UserDeviceInfo(req, res)
-      console.log("the code is here at the moment", { userDeviceInfo })
-      console.log("use-device-info", await this.userDeviceInfo.info())
       const {
         browser,
         city,
@@ -91,9 +94,6 @@ class AuthService {
         long,
         os,
       } = await this.userDeviceInfo.info()
-      console.log("info-breakdown", browser, city, country, deviceName)
-      // console.log("specific-device-info", this.userDeviceInfo.city)
-      // console.log("user-device-info-browser", this.userDeviceInfo.browser)
       loginSession.deviceName = deviceName
       loginSession.deviceType = deviceType
       loginSession.browser = browser
@@ -103,8 +103,9 @@ class AuthService {
       loginSession.lat = Number(lat)
       loginSession.long = Number(long)
       loginSession.loginAt = new Date(new Date().getDate())
-      // const session = await this.loginSessionRepository.save(loginSession)
-      // return session
+      loginSession.os = os
+      const session = await this.loginSessionRepository.save(loginSession)
+      return session
     } catch (error) {
       logger.error(error)
       throw error
@@ -114,7 +115,6 @@ class AuthService {
   async signup(userRequestBody: ISignUp, req: Request, res: Response) {
     try {
       // add the user to the DB
-
       const newUser = new User()
       newUser.email = userRequestBody.email
       newUser.firstName = userRequestBody.firstName
@@ -126,20 +126,40 @@ class AuthService {
 
       // create login session history
       const newLoginSession = new LoginSession()
-      console.log("User-Agent", res.locals.ua)
-      const session = this.createDeviceLoginInfo(req, res, newLoginSession)
-      logger.info({ session })
-      logger.info("User session created")
+      const userSession = await this.createDeviceLoginInfo(
+        req,
+        res,
+        newLoginSession
+      )
 
       const user = await this.userRepository.save(newUser)
+      const session = await this.loginSessionRepository.save(userSession)
+      // add session to state
 
-      return user
+      return { user, session }
     } catch (error) {
-      logger.error(error)
+      throw error
     }
   }
 
   static async login() {}
+
+  async sendWelcomeMailToUser(email: string) {
+    try {
+      // return await Sendmail(welcomeTemplate)
+      return this.emailService.sendWelcomeMail(email)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async sendLoginAlertToUser(email: string, session_id: string) {
+    try {
+      return this.emailService.sendLoginAlertMail(email)
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default AuthService

@@ -1,3 +1,5 @@
+import Env from "./app.keys"
+
 const joiValidatorOptions = {
   errors: {
     wrap: {
@@ -16,4 +18,11 @@ const ENVIRONMENTS = Object.freeze({
   STAGING: "staging",
 })
 
-export { ENVIRONMENTS, joiValidatorOptions }
+const QUEUE_CONFIG = Object.freeze({
+  host: Env.REDIS_HOST,
+  port: parseInt(Env.REDIS_PORT || "6379"),
+  retries: 3,
+  delay: 1000 * 60 * 5,
+})
+
+export { ENVIRONMENTS, QUEUE_CONFIG, joiValidatorOptions }

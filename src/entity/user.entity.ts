@@ -17,8 +17,8 @@ import ExtendedBaseEntity from "./extended-base.entity"
 
 @Entity("user_tbl")
 class User extends ExtendedBaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Column({ length: 50 })
   @IsString()

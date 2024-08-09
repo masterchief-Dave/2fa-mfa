@@ -1,0 +1,26 @@
+<!-- prettier-ignore -->
+{{#> base_template}}
+  {{#*inline "content"}}    
+
+        <h1>New Device Login Detected</h1>
+        <p class="greeting"><strong>Hi {{userName}},</strong></p>
+
+        <p>We noticed a login to your Boilerplate account from a new device. Here are the details:</p>
+
+        <ul>
+            <li><strong>Device Name:</strong> {{deviceName}}</li>
+            <li><strong>Device Type:</strong> {{deviceType}}</li>
+            <li><strong>Operating System:</strong> {{os}}</li>
+            <li><strong>Browser:</strong> {{browser}}</li>
+            <li><strong>City:</strong> {{city}}</li>
+            <li><strong>Country:</strong> {{country}}</li>
+            <li><strong>IP Address:</strong> {{ipAddress}}</li>
+            <li><strong>Latitude:</strong> {{lat}}</li>
+            <li><strong>Longitude:</strong> {{long}}</li>
+            <li><strong>Login Time:</strong> {{loginAt}}</li>
+        </ul>
+
+        <p>If this wasn't you, please secure your account immediately by changing your password and reviewing your account settings.</p>
+
+{{/inline}}
+{{/base_template}}

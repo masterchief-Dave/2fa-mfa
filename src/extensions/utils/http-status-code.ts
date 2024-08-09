@@ -1,9 +1,15 @@
-const HTTP_STATUS_CODE = {
+const HTTP_STATUS_CODE = Object.freeze({
   200: "SUCCESS",
-  201: "SUCCESS",
+  201: "CREATED",
+  204: "NO CONTENT",
+  304: "NOT MODIFIED",
   400: "BAD REQUEST",
   401: "AUTHENTICATION FAILED",
+  403: "FORBIDDEN",
+  404: "NOT FOUND",
+  422: "UNPROCESSABLE ENTITY",
+  429: "TOO MANY REQUEST",
   500: "SERVER ERROR",
-} as const
+} as const)
 
 export default HTTP_STATUS_CODE
