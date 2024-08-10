@@ -11,9 +11,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm"
 import ExtendedBaseEntity from "./extended-base.entity"
+import LoginSession from "./login-session.entity"
 
 @Entity("user_tbl")
 class User extends ExtendedBaseEntity {
@@ -67,6 +69,9 @@ class User extends ExtendedBaseEntity {
 
   @Column({ nullable: true })
   token: string
+
+  @OneToMany(() => LoginSession, (session) => session.user)
+  logginSession: LoginSession[]
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -1,6 +1,7 @@
 import { IsDate } from "class-validator"
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import ExtendedBaseEntity from "./extended-base.entity"
+import User from "./user.entity"
 
 @Entity({ name: "login_session_tbl" })
 class LoginSession extends ExtendedBaseEntity {
@@ -37,6 +38,15 @@ class LoginSession extends ExtendedBaseEntity {
   @Column({ name: "login_at", type: "timestamp" })
   @IsDate()
   loginAt: Date
+
+  @ManyToOne(() => User, (user) => user.logginSession)
+  user: User
 }
 
 export default LoginSession
+
+/**
+ * a user can login on differnt devices, but a session can only belong to one user
+ * one to many
+ * one user to many session
+ */

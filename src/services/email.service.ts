@@ -1,8 +1,13 @@
 import Env from "../config/app.keys"
 import { addEmailToQueue } from "../queue"
 import renderTemplate from "../views/email/render-templates.views"
+import LoginSessionService from "./login-session.service"
 
 class EmailService {
+  private loginSessionService: LoginSessionService
+  constructor() {
+    this.loginSessionService = new LoginSessionService()
+  }
   private emailContent(email: string, subject: string, emailTemplate: string) {
     return {
       from: `Boilerplate <${Env.SMTP_USER}>`,
@@ -28,8 +33,10 @@ class EmailService {
     }
   }
 
-  async sendLoginAlertMail(email: string) {
+  async sendLoginAlertMail(email: string, session_id: string) {
     try {
+      const response = await this.loginSessionService.getSessionById(session_id)
+      console.log({ response })
       const emailTemplate = renderTemplate("login-alert", {
         title: "Login Alert",
       })

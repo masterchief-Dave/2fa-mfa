@@ -48,6 +48,7 @@ class AuthController extends BaseApiController {
       if (login_alert_response !== APP_CONSTANTS.EMAIL_SENT) {
         // throw error
       }
+
       res.end()
     } catch (error) {
       this.sendErrorResponse(res, error, BAD_REQUEST, 400, {})

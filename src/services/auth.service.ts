@@ -134,7 +134,6 @@ class AuthService {
 
       const user = await this.userRepository.save(newUser)
       const session = await this.loginSessionRepository.save(userSession)
-      // add session to state
 
       return { user, session }
     } catch (error) {
@@ -147,6 +146,7 @@ class AuthService {
   async sendWelcomeMailToUser(email: string) {
     try {
       // return await Sendmail(welcomeTemplate)
+      // I want to move the login session of this user to the email service so thay the login information will show
       return this.emailService.sendWelcomeMail(email)
     } catch (error) {
       throw error
@@ -155,7 +155,7 @@ class AuthService {
 
   async sendLoginAlertToUser(email: string, session_id: string) {
     try {
-      return this.emailService.sendLoginAlertMail(email)
+      return this.emailService.sendLoginAlertMail(email, session_id)
     } catch (error) {
       throw error
     }
